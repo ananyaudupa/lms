@@ -2,5 +2,27 @@
   "extends": "./tsconfig.base.json",
   "compileOnSave": false,
   "files": [],
-  "references": []
+  "references": [
+    {
+      "path": "./student-app"
+    },
+    {
+      "path": "./admin-app"
+    },
+    {
+      "path": "./core"
+    },
+    {
+      "path": "./shared"
+    },
+    {
+      "path": "./ui"
+    },
+    {
+      "path": "./data-access"
+    },
+    {
+      "path": "./features"
+    }
+  ]
 }
