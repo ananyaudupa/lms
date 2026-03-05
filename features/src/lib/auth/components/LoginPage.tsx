@@ -2,10 +2,14 @@ import { LoginBackground } from './LoginBackground';
 import { LoginLeftPanel } from './LoginLeftPanel';
 import { LoginCard } from './LoginCard';
 
-export function LoginPage() {
+type Props = {
+  studentsImage?: string;
+};
+
+export function LoginPage({ studentsImage }: Props) {
   return (
     <LoginBackground>
-      <LoginLeftPanel />
+      <LoginLeftPanel studentsImage={studentsImage} />
       <LoginCard />
     </LoginBackground>
   );

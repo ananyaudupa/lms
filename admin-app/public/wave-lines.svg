@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" preserveAspectRatio="none">
+  <!-- Main bright lines -->
+  <path fill="none" stroke="#4f8ef7" stroke-width="2" opacity="0.8"
+    d="M0,450 C150,350 300,550 450,450 S750,350 900,450 S1200,550 1440,450"/>
+  <path fill="none" stroke="#06b6d4" stroke-width="1.5" opacity="0.6"
+    d="M0,500 C150,400 300,600 450,500 S750,400 900,500 S1200,600 1440,500"/>
+  <path fill="none" stroke="#4f8ef7" stroke-width="1" opacity="0.4"
+    d="M0,400 C150,300 300,500 450,400 S750,300 900,400 S1200,500 1440,400"/>
+  <path fill="none" stroke="#06b6d4" stroke-width="1" opacity="0.3"
+    d="M0,550 C150,450 300,650 450,550 S750,450 900,550 S1200,650 1440,550"/>
+  <path fill="none" stroke="#818cf8" stroke-width="0.8" opacity="0.3"
+    d="M0,350 C150,250 300,450 450,350 S750,250 900,350 S1200,450 1440,350"/>
+  <path fill="none" stroke="#4f8ef7" stroke-width="0.6" opacity="0.2"
+    d="M0,600 C150,500 300,700 450,600 S750,500 900,600 S1200,700 1440,600"/>
+
+  <!-- Glowing dots -->
+  <circle cx="200" cy="420" r="2" fill="#4f8ef7" opacity="0.6"/>
+  <circle cx="400" cy="380" r="1.5" fill="#06b6d4" opacity="0.5"/>
+  <circle cx="600" cy="460" r="2" fill="#4f8ef7" opacity="0.6"/>
+  <circle cx="800" cy="400" r="1.5" fill="#06b6d4" opacity="0.5"/>
+  <circle cx="1000" cy="440" r="2" fill="#4f8ef7" opacity="0.6"/>
+  <circle cx="1200" cy="390" r="1.5" fill="#06b6d4" opacity="0.5"/>
+  <circle cx="300" cy="500" r="1.5" fill="#818cf8" opacity="0.4"/>
+  <circle cx="700" cy="520" r="2" fill="#4f8ef7" opacity="0.4"/>
+  <circle cx="1100" cy="480" r="1.5" fill="#06b6d4" opacity="0.4"/>
+</svg>
