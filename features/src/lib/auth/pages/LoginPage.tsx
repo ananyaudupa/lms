@@ -1,6 +1,6 @@
-import { LoginBackground } from './LoginBackground';
-import { LoginLeftPanel } from './LoginLeftPanel';
-import { LoginCard } from './LoginCard';
+import { LoginBackground } from '../components/LoginBackground';
+import { LoginLeftPanel } from '../components/LoginLeftPanel';
+import { LoginCard } from '../components/LoginCard';
 
 type Props = {
   studentsImage?: string;

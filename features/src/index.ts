@@ -1,6 +1,6 @@
 export * from './lib/features';
 export * from './lib/roadmap/pages/RoadmapPage.js';
-export { LoginPage } from './lib/auth/components/LoginPage';
+export { LoginPage } from './lib/auth/pages/LoginPage';
 export { LoginForm } from './lib/auth/components/LoginForm';
 export { LoginCard } from './lib/auth/components/LoginCard';
 export { LoginLeftPanel } from './lib/auth/components/LoginLeftPanel';
