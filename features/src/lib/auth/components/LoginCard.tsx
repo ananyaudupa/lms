@@ -10,21 +10,27 @@ export function LoginCard() {
     <Box
       sx={{
         position: 'absolute',
-        right: '22%',
+        right: '14%',
         top: '50%',
         transform: 'translateY(-50%)',
         zIndex: 2,
         width: { xs: '90%', md: 420 },
-        background: '#e8edf2',
-        borderRadius: 4,
-        boxShadow: '0 24px 64px rgba(0,0,0,0.35)',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
       }}
     >
-      {/* Form content with padding */}
-      <Box sx={{ px: 5, pt: 5 }}>
+      {/* Card */}
+      <Box
+        sx={{
+          background: 'rgba(232, 237, 242, 0.82)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderRadius: 4,
+          boxShadow: '0 24px 64px rgba(0,0,0,0.35)',
+          px: 5,
+          pt: 5,
+          pb: 10,
+          overflow:'visible',
+        }}
+      >
         <LoginForm
           onSubmit={handleSubmit}
           values={values}
@@ -33,8 +39,10 @@ export function LoginCard() {
         />
       </Box>
 
-      {/* Button — completely outside padding, flush to card edges */}
-      <LoginButton loading={loading} />
+      {/* Button overlays bottom of card */}
+      <Box sx={{ position: 'absolute', bottom: 32, left: -24, right: -24 }}>
+        <LoginButton loading={loading} />
+      </Box>
     </Box>
   );
 }

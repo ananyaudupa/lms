@@ -1,8 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { useLogin } from '../hooks/useLogin';
 import { LoginLogo } from './LoginLogo';
-import { LoginEmailField } from './LoginEmailField';
-import { LoginPasswordField } from './LoginPasswordField';
+import { LoginFields } from './LoginFields';
 import { LoginActions } from './LoginActions';
 
 type Props = {
@@ -23,8 +22,14 @@ export function LoginForm({ onSubmit, values, errors, handleChange }: Props) {
       <Typography variant="h5" sx={{ fontWeight: 700, color: '#1a1a2e', textAlign: 'center', lineHeight: 1.3 }}>
         Log In to Continue your<br />Learning Journey
       </Typography>
-      <LoginEmailField value={values.email} error={errors.email} onChange={handleChange('email')} />
-      <LoginPasswordField value={values.password} error={errors.password} onChange={handleChange('password')} />
+      <LoginFields
+        emailValue={values.email}
+        emailError={errors.email}
+        onEmailChange={handleChange('email')}
+        passwordValue={values.password}
+        passwordError={errors.password}
+        onPasswordChange={handleChange('password')}
+      />
       <LoginActions rememberMe={values.rememberMe} onChange={handleChange('rememberMe')} />
     </Box>
   );
