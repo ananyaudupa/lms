@@ -4,22 +4,22 @@ import bgImage from '../assets/login_bg.png';
 export function LoginBackground({ children }: { children: React.ReactNode }) {
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', position: 'relative', overflow: 'hidden' }}>
-      {/* PNG background image — 75% */}
+      {/* Blue BG — full width on mobile/tablet, 75% on desktop */}
       <Box
         sx={{
           position: 'absolute', inset: 0,
-          width: '75%',
+          width: { xs: '100%', md: '75%' },
           backgroundImage: `url(${bgImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       />
 
-      {/* White — 25% */}
+      {/* White panel — hidden on mobile, 25% on desktop */}
       <Box
         sx={{
           position: 'absolute', inset: 0,
-          left: '75%',
+          left: { xs: '100%', md: '75%' },
           background: '#f1f5f9',
         }}
       />
@@ -32,8 +32,9 @@ export function LoginBackground({ children }: { children: React.ReactNode }) {
           width: '100%',
           minHeight: '100vh',
           display: 'flex',
-          alignItems: 'center',
-          px: { xs: 2, md: 10 },
+          flexDirection: { xs: 'column', md: 'row' },
+          alignItems: { xs: 'stretch', md: 'center' },
+          px: { xs: 2, sm: 4, md: 10 },
         }}
       >
         {children}

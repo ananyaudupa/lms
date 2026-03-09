@@ -7,3 +7,5 @@ export { LoginLeftPanel } from './lib/auth/components/LoginLeftPanel';
 export { LoginBackground } from './lib/auth/components/LoginBackground';
 export { LoginStats } from './lib/auth/components/LoginStats';
 export { useLogin } from './lib/auth/hooks/useLogin';
+export { DashboardPage } from './lib/dashboard/pages/DashboardPage';
+export { CoursesPage } from './lib/courses/pages/CoursesPage';
