@@ -1,5 +1,6 @@
 import { Box, Typography, Button } from '@mui/material';
 import { tokens } from '@org/shared';
+import { courseStore } from '../context/CourseContext';
 
 type Props = {
   title: string;
@@ -11,13 +12,15 @@ type Props = {
 };
 
 export function CourseCard({ title, description, image, enrolled = false, progress, buttonLabel = 'Begin Course' }: Props) {
+  const handleClick = () => {
+    courseStore.set({ title, description, image, enrolled, progress });
+    window.location.href = '/course-detail';
+  };
+
   return (
     <Box sx={{
-      background: tokens.courseCardBg,
-      borderRadius: 3,
-      overflow: 'hidden',
-      boxShadow: tokens.courseCardShadow,
-      transition: 'box-shadow 0.2s, transform 0.2s',
+      background: tokens.courseCardBg, borderRadius: 3, overflow: 'hidden',
+      boxShadow: tokens.courseCardShadow, transition: 'box-shadow 0.2s, transform 0.2s',
       '&:hover': { boxShadow: tokens.courseCardShadowHover, transform: 'translateY(-2px)' },
       position: 'relative',
     }}>
@@ -25,8 +28,6 @@ export function CourseCard({ title, description, image, enrolled = false, progre
       <Box sx={{ position: 'relative', overflow: 'hidden' }}>
         <Box component="img" src={image} alt={title}
           sx={{ width: '100%', height: 200, objectFit: 'cover', display: 'block' }} />
-
-        {/* Enrolled ribbon */}
         {enrolled && (
           <Box sx={{
             position: 'absolute', top: 18, right: -28, width: 120, textAlign: 'center',
@@ -49,9 +50,8 @@ export function CourseCard({ title, description, image, enrolled = false, progre
           {description}
         </Typography>
 
-        {/* Button */}
         {enrolled && progress !== undefined ? (
-          <Button fullWidth variant="contained"
+          <Button fullWidth variant="contained" onClick={handleClick}
             sx={{
               background: `linear-gradient(90deg, ${tokens.btnContinue}, #38bdf8)`,
               textTransform: 'none', fontWeight: 700, fontSize: 15, borderRadius: 2, py: 1.2,
@@ -65,7 +65,7 @@ export function CourseCard({ title, description, image, enrolled = false, progre
             </Box>
           </Button>
         ) : (
-          <Button fullWidth variant="contained"
+          <Button fullWidth variant="contained" onClick={handleClick}
             sx={{
               background: tokens.btnPrimary,
               textTransform: 'none', fontWeight: 700, fontSize: 15, borderRadius: 2, py: 1.2,

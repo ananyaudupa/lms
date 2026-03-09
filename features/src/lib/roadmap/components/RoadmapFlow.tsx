@@ -10,6 +10,7 @@ import { CustomNode } from './CustomNode';
 import { InlineNodeInput, NewNodeType } from './InlineNodeInput';
 import { NodePanel } from './NodePanel';
 import { Toast } from './Toast';
+import { getNodeContent } from '../data/node.data';
 
 const nodeTypes = { custom: CustomNode };
 
@@ -123,9 +124,9 @@ function FlowContent({ nodes, edges, isEditable }: RoadmapFlowProps) {
         ? flowNodesRef.current.find(n => n.id === bottomEdge.target)
         : null;
       const tgtY = targetNode?.position.y ?? srcY + 150;
-      const newPosition = { 
-        x: srcX, 
-        y: srcY + Math.max((tgtY - srcY) / 2, 80), // minimum 80px gap
+      const newPosition = {
+        x: srcX,
+        y: srcY + Math.max((tgtY - srcY) / 2, 80),
       };
 
       if (bottomEdge) {
@@ -237,23 +238,23 @@ function FlowContent({ nodes, edges, isEditable }: RoadmapFlowProps) {
     setInputScreenPos(null);
   }, [pendingNode, isEditable]);
 
-  // + button position from selected node canvas coords → screen coords
-const addButtonPos = selectedNodeId && isEditable && !pendingNode
-  ? (() => {
-      const node = flowNodesRef.current.find(n => n.id === selectedNodeId);
-      if (!node) return null;
-      const bounds = flowWrapper.current?.getBoundingClientRect();
-      if (!bounds) return null;
-      const { x: vpX, y: vpY, zoom } = getViewport();
-      return {
-        x: (node.position.x + 90) * zoom + vpX + bounds.left,
-        y: (node.position.y + 20) * zoom + vpY + bounds.top + 10,  // ← reduced y offset
-      };
-    })()
-  : null;
+  const addButtonPos = selectedNodeId && isEditable && !pendingNode
+    ? (() => {
+        const node = flowNodesRef.current.find(n => n.id === selectedNodeId);
+        if (!node) return null;
+        const bounds = flowWrapper.current?.getBoundingClientRect();
+        if (!bounds) return null;
+        const { x: vpX, y: vpY, zoom } = getViewport();
+        return {
+          x: (node.position.x + 90) * zoom + vpX + bounds.left,
+          y: (node.position.y + 20) * zoom + vpY + bounds.top + 10,
+        };
+      })()
+    : null;
 
   return (
-    <div ref={flowWrapper} style={{ position: 'fixed', inset: 0 }}>
+    // ← KEY CHANGE: relative + width/height 100% instead of fixed + inset 0
+    <div ref={flowWrapper} style={{ position: 'relative', width: '100%', height: '100%' }}>
       <ReactFlow
         nodes={flowNodes}
         edges={flowEdges}
@@ -281,13 +282,12 @@ const addButtonPos = selectedNodeId && isEditable && !pendingNode
         zoomOnPinch
         fitView
         fitViewOptions={{ padding: 0.2 }}
-        style={{ background: '#f1f5f9' }}
+        style={{ background: '#f1f5f9', width: '100%', height: '100%' }}
       >
         <Background gap={18} size={1} color="#cbd5e1" />
         <Controls />
       </ReactFlow>
 
-      {/* + button — fixed overlay, triggered by node selection */}
       {isEditable && selectedNodeId && addButtonPos && !pendingNode && (
         <div
           onMouseDown={e => {
@@ -340,6 +340,7 @@ const addButtonPos = selectedNodeId && isEditable && !pendingNode
       {selectedNode && !pendingNode && (
         <NodePanel
           label={selectedNode.label}
+          content={getNodeContent(selectedNode.label)}
           onClose={() => {
             setSelectedNode(null);
             setSelectedNodeId(null);
