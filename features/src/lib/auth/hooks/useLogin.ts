@@ -55,7 +55,7 @@ export const useLogin = () => {
     try {
       // TODO: replace with real API call
       await new Promise(res => setTimeout(res, 1500));
-      console.log('Login submitted:', values);
+      window.location.href = '/dashboard';
     } finally {
       setLoading(false);
     }

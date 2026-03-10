@@ -2,7 +2,7 @@ import { Node, Edge } from 'reactflow';
 
 export const roadmapNodes: Node[] = [
   { id: 'frontend',        type: 'custom', position: { x: 400, y: 0 },    data: { label: 'Front-end',               variant: 'spine' } },
-  { id: 'internet',        type: 'custom', position: { x: 400, y: 100 },  data: { label: 'Internet',                variant: 'spine' } },
+  { id: 'internet',        type: 'custom', position: { x: 400, y: 100 },  data: { label: 'Internet',                variant: 'spine', completed: true } },
   { id: 'html',            type: 'custom', position: { x: 400, y: 250 },  data: { label: 'HTML',                    variant: 'spine' } },
   { id: 'css',             type: 'custom', position: { x: 400, y: 330 },  data: { label: 'CSS',                     variant: 'spine' } },
   { id: 'javascript',      type: 'custom', position: { x: 400, y: 410 },  data: { label: 'JavaScript',              variant: 'spine' } },
@@ -17,8 +17,8 @@ export const roadmapNodes: Node[] = [
   { id: 'mcp',             type: 'custom', position: { x: 400, y: 1190 }, data: { label: 'MCP',                     variant: 'spine' } },
   { id: 'skills',          type: 'custom', position: { x: 400, y: 1270 }, data: { label: 'Skills',                  variant: 'spine' } },
 
-  { id: 'how-internet',    type: 'custom', position: { x: 750, y: 20 },   data: { label: 'How does the Internet work?', variant: 'side' } },
-  { id: 'http',            type: 'custom', position: { x: 750, y: 80 },   data: { label: 'What is HTTP?',           variant: 'side' } },
+  { id: 'how-internet',    type: 'custom', position: { x: 750, y: 20 },   data: { label: 'How does the Internet work?', variant: 'side', completed: true } },
+  { id: 'http',            type: 'custom', position: { x: 750, y: 80 },   data: { label: 'What is HTTP?',           variant: 'side', completed: true } },
   { id: 'domain-name',     type: 'custom', position: { x: 750, y: 140 },  data: { label: 'What is Domain Name?',    variant: 'side' } },
   { id: 'hosting',         type: 'custom', position: { x: 750, y: 200 },  data: { label: 'What is Hosting?',        variant: 'side' } },
   { id: 'dns',             type: 'custom', position: { x: 750, y: 260 },  data: { label: 'DNS and how it works?',   variant: 'side' } },

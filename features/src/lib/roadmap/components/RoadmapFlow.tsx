@@ -12,6 +12,31 @@ import { NodePanel } from './NodePanel';
 import { Toast } from './Toast';
 import { getNodeContent } from '../data/node.data';
 
+// Inject animated dash CSS once
+const styleTag = document.createElement('style');
+styleTag.textContent = `
+  @keyframes dashFlow {
+    from { stroke-dashoffset: 20; }
+    to   { stroke-dashoffset: 0; }
+  }
+`;
+document.head.appendChild(styleTag);
+
+function styleEdge(e: Edge): Edge {
+  const isDashed = e.data?.variant === 'dashed';
+  return {
+    ...e,
+    style: {
+      stroke: '#2563eb',
+      strokeWidth: 2,
+      ...(isDashed ? {
+        strokeDasharray: '6 4',
+        animation: 'dashFlow 0.8s linear infinite',
+      } : {}),
+    },
+  };
+}
+
 const nodeTypes = { custom: CustomNode };
 
 type RoadmapFlowProps = {
@@ -64,7 +89,7 @@ function FlowContent({ nodes, edges, isEditable }: RoadmapFlowProps) {
   );
 
   const [flowEdges, setFlowEdges] = useEdgesState(
-    edges.map(e => ({ ...e }))
+    edges.map(e => styleEdge(e))
   );
 
   useEffect(() => { flowNodesRef.current = flowNodes; }, [flowNodes]);
@@ -134,35 +159,35 @@ function FlowContent({ nodes, edges, isEditable }: RoadmapFlowProps) {
           const filtered = prev.filter(e => e.id !== bottomEdge.id);
           return [
             ...filtered,
-            {
+            styleEdge({
               id: `e-${pendingNode.sourceNodeId}-${newNodeId}`,
               source: pendingNode.sourceNodeId,
               target: newNodeId,
               sourceHandle: 'bottom',
               targetHandle: 'top',
               data: { variant: 'solid' },
-            },
-            {
+            }),
+            styleEdge({
               id: `e-${newNodeId}-${bottomEdge.target}`,
               source: newNodeId,
               target: bottomEdge.target,
               sourceHandle: 'bottom',
               targetHandle: 'top',
               data: { variant: 'solid' },
-            },
+            }),
           ];
         });
       } else {
         setFlowEdges(prev => [
           ...prev,
-          {
+          styleEdge({
             id: `e-${pendingNode.sourceNodeId}-${newNodeId}`,
             source: pendingNode.sourceNodeId,
             target: newNodeId,
             sourceHandle: 'bottom',
             targetHandle: 'top',
             data: { variant: 'solid' },
-          },
+          }),
         ]);
       }
 
@@ -213,14 +238,14 @@ function FlowContent({ nodes, edges, isEditable }: RoadmapFlowProps) {
 
       setFlowEdges(prev => [
         ...prev,
-        {
+        styleEdge({
           id: `e-${pendingNode.sourceNodeId}-${newNodeId}`,
           source: pendingNode.sourceNodeId,
           target: newNodeId,
           sourceHandle,
           targetHandle,
           data: { variant: 'dashed' },
-        },
+        }),
       ]);
 
       setFlowNodes(prev => [

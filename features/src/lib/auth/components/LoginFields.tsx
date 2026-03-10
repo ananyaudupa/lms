@@ -1,6 +1,9 @@
-import { Box, TextField, Typography, InputAdornment } from '@mui/material';
+import { useState } from 'react';
+import { Box, TextField, Typography, InputAdornment, IconButton } from '@mui/material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 
 type Props = {
   emailValue: string;
@@ -25,6 +28,8 @@ export function LoginFields({
   emailValue, emailError, onEmailChange,
   passwordValue, passwordError, onPasswordChange,
 }: Props) {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <>
       <Box sx={{ width: '100%' }}>
@@ -55,7 +60,7 @@ export function LoginFields({
         </Typography>
         <TextField
           fullWidth
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           placeholder="Enter Your Password"
           value={passwordValue}
           onChange={onPasswordChange}
@@ -65,6 +70,16 @@ export function LoginFields({
             startAdornment: (
               <InputAdornment position="start">
                 <LockOutlinedIcon sx={{ color: '#94a3b8', fontSize: 20 }} />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(p => !p)} edge="end" size="small">
+                  {showPassword
+                    ? <VisibilityOutlinedIcon sx={{ color: '#94a3b8', fontSize: 20 }} />
+                    : <VisibilityOffOutlinedIcon sx={{ color: '#94a3b8', fontSize: 20 }} />
+                  }
+                </IconButton>
               </InputAdornment>
             ),
           }}

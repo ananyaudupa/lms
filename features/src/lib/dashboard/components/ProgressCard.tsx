@@ -1,18 +1,25 @@
 import { Box, Typography, LinearProgress } from '@mui/material';
 import { CourseActionButton } from './CourseActionButton';
 import { tokens } from '@org/shared';
+import { courseStore } from '../../courses/context/CourseContext';
 
 type Props = {
   title: string;
   progress: number;
   status: 'finished' | 'continue' | 'start';
   image: string;
+  description?: string;
 };
 
 const progressColor = (progress: number) =>
   progress === 100 ? '#16a34a' : progress === 0 ? tokens.textMuted : tokens.primary;
 
-export function CourseProgressCard({ title, progress, status, image }: Props) {
+export function CourseProgressCard({ title, progress, status, image, description = '' }: Props) {
+  const handleClick = () => {
+    courseStore.set({ title, image, progress, description, enrolled: true });
+    window.location.href = '/course-detail';
+  };
+
   return (
     <Box sx={{
       background: '#fff', borderRadius: 3, p: 2.5, display: 'flex',
@@ -41,7 +48,7 @@ export function CourseProgressCard({ title, progress, status, image }: Props) {
           },
         }} />
       </Box>
-      <Box sx={{ flexShrink: 0 }}>
+      <Box sx={{ flexShrink: 0 }} onClick={handleClick} style={{ cursor: 'pointer' }}>
         <CourseActionButton status={status} />
       </Box>
     </Box>

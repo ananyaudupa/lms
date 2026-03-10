@@ -9,12 +9,10 @@ export function LoginCard() {
   return (
     <Box
       sx={{
-        // Desktop: absolute positioned on right
         position: { xs: 'relative', md: 'absolute' },
         right: { md: '14%' },
         top: { md: '50%' },
         transform: { md: 'translateY(-50%)' },
-        // Mobile: centered with margin
         mx: { xs: 'auto', md: 0 },
         my: { xs: 4, md: 0 },
         zIndex: 2,
@@ -23,6 +21,9 @@ export function LoginCard() {
     >
       {/* Card */}
       <Box
+        component="form"
+        id="login-form"
+        onSubmit={handleSubmit}
         sx={{
           background: 'rgba(232, 237, 242, 0.82)',
           backdropFilter: 'blur(12px)',
@@ -36,16 +37,15 @@ export function LoginCard() {
         }}
       >
         <LoginForm
-          onSubmit={handleSubmit}
           values={values}
           errors={errors}
           handleChange={handleChange}
         />
       </Box>
 
-      {/* Button overlays bottom of card */}
+      {/* Button overlays bottom of card — linked to form via form attribute */}
       <Box sx={{ position: 'absolute', bottom: 32, left: { xs: -12, sm: -24 }, right: { xs: -12, sm: -24 } }}>
-        <LoginButton loading={loading} />
+        <LoginButton loading={loading} formId="login-form" />
       </Box>
     </Box>
   );
