@@ -95,19 +95,7 @@ function FlowContent({ nodes, edges, isEditable }: RoadmapFlowProps) {
   useEffect(() => { flowNodesRef.current = flowNodes; }, [flowNodes]);
   useEffect(() => { flowEdgesRef.current = flowEdges; }, [flowEdges]);
 
-  const triggerFitView = useCallback(() => {
-    setTimeout(() => fitView({ padding: 0.2, duration: 400 }), 50);
-  }, [fitView]);
 
-  useEffect(() => {
-    setTimeout(() => fitView({ padding: 0.2 }), 100);
-    window.visualViewport?.addEventListener('resize', triggerFitView);
-    window.addEventListener('resize', triggerFitView);
-    return () => {
-      window.visualViewport?.removeEventListener('resize', triggerFitView);
-      window.removeEventListener('resize', triggerFitView);
-    };
-  }, [fitView, triggerFitView]);
 
   useEffect(() => {
     setFlowNodes(prev => prev.map(n => ({
@@ -300,13 +288,14 @@ function FlowContent({ nodes, edges, isEditable }: RoadmapFlowProps) {
           setSelectedNodeId(null);
         }}
         onNodeDragStop={isEditable ? handleNodeDragStop : undefined}
-        minZoom={0.3}
-        maxZoom={2}
+        minZoom={0.15}
+        maxZoom={2.5}
         panOnDrag={true}
-        zoomOnScroll
-        zoomOnPinch
-        fitView
-        fitViewOptions={{ padding: 0.2 }}
+        zoomOnScroll={false}
+        zoomOnPinch={true}
+        panOnScroll={true}
+        
+        defaultViewport={{ x: -100, y: 20, zoom: 1.2}}
         style={{ background: '#f1f5f9', width: '100%', height: '100%' }}
       >
         <Background gap={18} size={1} color="#cbd5e1" />

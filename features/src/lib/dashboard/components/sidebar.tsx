@@ -67,12 +67,17 @@ export function DashboardSidebar({ activePage = 'Dashboard' }: Props) {
         </Box>
       </Box>
 
-      <Box sx={{
-        display: 'flex', alignItems: 'center', gap: 1.5, px: 2, py: 1.5,
-        borderRadius: 2, cursor: 'pointer',
-        border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.7)',
-        '&:hover': { background: 'rgba(255,255,255,0.08)', color: '#fff' }, transition: 'all 0.2s',
-      }}>
+      {/* Sign Out — navigates to login page */}
+      <Box
+        onClick={() => { window.location.href = '/login'; }}
+        sx={{
+          display: 'flex', alignItems: 'center', gap: 1.5, px: 2, py: 1.5,
+          borderRadius: 2, cursor: 'pointer',
+          border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.7)',
+          '&:hover': { background: 'rgba(255,255,255,0.08)', color: '#fff' },
+          transition: 'all 0.2s',
+        }}
+      >
         <LogoutIcon fontSize="small" />
         <Typography sx={{ fontWeight: 600, fontSize: 14 }}>Sign Out</Typography>
       </Box>

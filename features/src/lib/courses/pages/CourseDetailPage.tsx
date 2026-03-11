@@ -22,8 +22,6 @@ type Props = {
 
 export function CourseDetailPage({ course, onBack }: Props) {
   const progress = course.progress ?? 0;
-
-  // null = show course detail; number = show explanation for that level
   const [explanationLevel, setExplanationLevel] = useState<number | null>(null);
 
   if (explanationLevel !== null) {
@@ -36,11 +34,12 @@ export function CourseDetailPage({ course, onBack }: Props) {
   }
 
   return (
-    <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden', background: tokens.pageBg }}>
+    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: tokens.pageBg }}>
       <DashboardSidebar activePage="Courses" />
 
-      <Box sx={{ flex: 1, overflowY: 'auto' }}>
-        <Box sx={{ p: 3 }}>
+      {/* Right side — fully scrollable */}
+      <div style={{ flex: 1, overflowY: 'auto', minWidth: 0 }}>
+        <div style={{ padding: '24px 24px 0 24px' }}>
 
           <CourseDetailHeader
             title={`${course.title} Developer`}
@@ -57,8 +56,11 @@ export function CourseDetailPage({ course, onBack }: Props) {
             onViewExplanation={(level) => setExplanationLevel(level)}
           />
 
-          <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Box sx={{ background: tokens.btnPrimary, borderRadius: 2, p: 1.2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{
+              background: tokens.btnPrimary, borderRadius: 2, p: 1.2,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
               <MenuBookIcon sx={{ color: '#fff', fontSize: 26 }} />
             </Box>
             <Box>
@@ -67,12 +69,14 @@ export function CourseDetailPage({ course, onBack }: Props) {
             </Box>
           </Box>
 
-          <Box sx={{ background: tokens.cardBg, borderRadius: 3, overflow: 'hidden', boxShadow: tokens.courseCardShadow, height: 600 }}>
-            <RoadmapPage isEditable={false} />
-          </Box>
+        </div>
 
-        </Box>
-      </Box>
-    </Box>
+        {/* Roadmap — fixed tall height, user scrolls page to see more */}
+        <div style={{ margin: '0 24px 24px 24px', borderRadius: 12, overflow: 'hidden', height: 2200, background: '#f1f5f9', boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}>
+          <RoadmapPage isEditable={false} />
+        </div>
+
+      </div>
+    </div>
   );
 }

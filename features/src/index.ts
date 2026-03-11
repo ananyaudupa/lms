@@ -10,3 +10,4 @@ export { useLogin } from './lib/auth/hooks/useLogin';
 export { DashboardPage } from './lib/dashboard/pages/DashboardPage';
 export { CoursesPage } from './lib/courses/pages/CoursesPage';
 export { CourseDetailPageWrapper } from './lib/courses/pages/Coursedetailpagewrapper';
+export { AssessmentsListPage } from './lib/assessments/pages/AssessmentsListPage';

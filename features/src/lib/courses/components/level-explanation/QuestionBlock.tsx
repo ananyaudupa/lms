@@ -1,4 +1,4 @@
-import { Box, Typography, Chip } from '@mui/material';
+import { Box, Typography, Chip, Divider } from '@mui/material';
 import { AnswerCard } from './AnswerCard';
 import type { QuestionResult } from '../../data/explanation.data';
 
@@ -8,7 +8,7 @@ type Props = {
 
 export function QuestionBlock({ q }: Props) {
   return (
-    <Box sx={{ mb: 4 }}>
+    <Box sx={{ mb: 3 }}>
       {/* Question header */}
       <Box sx={{
         display: 'flex', alignItems: 'flex-start',
@@ -38,6 +38,9 @@ export function QuestionBlock({ q }: Props) {
       {q.options.map((opt: import('../../data/explanation.data').AnswerOption) => (
         <AnswerCard key={opt.letter} option={opt} />
       ))}
+
+      {/* Separator between questions */}
+      <Divider sx={{ mt: 3, borderColor: '#e2e8f0' }} />
     </Box>
   );
 }

@@ -5,6 +5,7 @@ import { LevelHeaderCard } from '../components/level-explanation/LevelHeaderCard
 import { AttemptsLog } from '../components/level-explanation/AttemptsLog';
 import { getLevelExplanation } from '../data/explanation.data';
 
+
 type Props = {
   level: number;
   onBack: () => void;
@@ -31,14 +32,10 @@ export function LevelExplanationPage({ level, onBack }: Props) {
       <DashboardSidebar activePage="Courses" />
 
       <Box sx={{ flex: 1, overflowY: 'auto' }}>
-        <Box sx={{ p: 3, maxWidth: 900, mx: 'auto' }}>
-
-          {/* Top card — back button, level title, pass/fail, stats, dates */}
+        {/* Full width — no maxWidth constraint */}
+        <Box sx={{ p: 3 }}>
           <LevelHeaderCard data={data} onBack={onBack} />
-
-          {/* Attempts log — collapsible rows with questions */}
           <AttemptsLog attempts={data.attempts} />
-
         </Box>
       </Box>
     </Box>

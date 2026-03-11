@@ -7,11 +7,11 @@ import { lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import studentsImage from '../assets/students.svg';
 
-// All pages lazy loaded from features
-const LoginPage            = lazy(() => import('@org/features').then(m => ({ default: m.LoginPage })));
-const DashboardPage        = lazy(() => import('@org/features').then(m => ({ default: m.DashboardPage })));
-const CoursesPage          = lazy(() => import('@org/features').then(m => ({ default: m.CoursesPage })));
-const CourseDetailWrapper  = lazy(() => import('@org/features').then(m => ({ default: m.CourseDetailPageWrapper })));
+const LoginPage           = lazy(() => import('@org/features').then(m => ({ default: m.LoginPage })));
+const DashboardPage       = lazy(() => import('@org/features').then(m => ({ default: m.DashboardPage })));
+const CoursesPage         = lazy(() => import('@org/features').then(m => ({ default: m.CoursesPage })));
+const CourseDetailWrapper = lazy(() => import('@org/features').then(m => ({ default: m.CourseDetailPageWrapper })));
+const AssessmentsListPage = lazy(() => import('@org/features').then(m => ({ default: m.AssessmentsListPage })));
 
 export default function App() {
   return (
@@ -20,6 +20,7 @@ export default function App() {
       <Route path="/dashboard"     element={<DashboardPage />} />
       <Route path="/courses"       element={<CoursesPage />} />
       <Route path="/course-detail" element={<CourseDetailWrapper />} />
+      <Route path="/assessments"   element={<AssessmentsListPage />} />
       <Route path="*"              element={<Navigate to="/login" replace />} />
     </Routes>
   );

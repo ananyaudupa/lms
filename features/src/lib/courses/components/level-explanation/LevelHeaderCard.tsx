@@ -16,29 +16,30 @@ export function LevelHeaderCard({ data, onBack }: Props) {
     <Box sx={{
       background: '#fff',
       borderRadius: 3,
-      border: `3px solid ${borderColor}`,
+      border: `2px solid ${borderColor}`,
       borderTop: `6px solid ${borderColor}`,
-      p: 3,
+      p: '24px 28px',
       mb: 3,
       boxShadow: '0 2px 16px rgba(0,0,0,0.07)',
     }}>
+
       {/* ── Title row ── */}
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2.5 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Box
             component="button"
             onClick={onBack}
             sx={{
-              width: 38, height: 38, borderRadius: 2,
+              width: 42, height: 42, borderRadius: 2,
               background: '#f1f5f9', border: '1px solid #e2e8f0',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer',
               '&:hover': { background: '#e2e8f0' },
             }}
           >
-            <ArrowBackIcon sx={{ fontSize: 18, color: '#475569' }} />
+            <ArrowBackIcon sx={{ fontSize: 20, color: '#475569' }} />
           </Box>
-          <Typography variant="h4" fontWeight={900} color={tokens.primary} letterSpacing={1}>
+          <Typography fontWeight={900} color={tokens.primary} letterSpacing={1} fontSize={36}>
             LEVEL {data.level}
           </Typography>
         </Box>
@@ -49,44 +50,32 @@ export function LevelHeaderCard({ data, onBack }: Props) {
             background: 'transparent',
             border: `2px solid ${borderColor}`,
             color: data.passed ? '#16a34a' : '#dc2626',
-            fontWeight: 800, fontSize: 14,
+            fontWeight: 700, fontSize: 14,
             height: 36, px: 1, borderRadius: 5,
           }}
         />
       </Box>
 
       {/* ── Stats row ── */}
-      <Box sx={{ display: 'flex', gap: 6, mb: 2.5 }}>
+      <Box sx={{ display: 'flex', gap: 8, mb: 2.5 }}>
         <Box>
-          <Typography fontSize={12} color="#94a3b8" fontWeight={500} mb={0.3}>
-            Passing Score
-          </Typography>
+          <Typography fontSize={13} color="#94a3b8" fontWeight={500} mb={0.5}>Passing Score</Typography>
           <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.5 }}>
-            <Typography fontSize={32} fontWeight={900} color="#0f172a" lineHeight={1}>
-              {data.passingScore}
-            </Typography>
-            <Typography fontSize={16} fontWeight={600} color="#64748b">%</Typography>
+            <Typography fontSize={36} fontWeight={900} color="#0f172a" lineHeight={1}>{data.passingScore}</Typography>
+            <Typography fontSize={18} fontWeight={600} color="#64748b">%</Typography>
           </Box>
         </Box>
 
         <Box>
-          <Typography fontSize={12} color="#94a3b8" fontWeight={500} mb={0.3}>
-            Attempt Taken
-          </Typography>
-          <Typography fontSize={32} fontWeight={900} color="#0f172a" lineHeight={1}>
-            {data.attemptsTaken}
-          </Typography>
+          <Typography fontSize={13} color="#94a3b8" fontWeight={500} mb={0.5}>Attempt Taken</Typography>
+          <Typography fontSize={36} fontWeight={900} color="#0f172a" lineHeight={1}>{data.attemptsTaken}</Typography>
         </Box>
 
         <Box>
-          <Typography fontSize={12} color="#94a3b8" fontWeight={500} mb={0.3}>
-            Time Allocated
-          </Typography>
+          <Typography fontSize={13} color="#94a3b8" fontWeight={500} mb={0.5}>Time Allocated</Typography>
           <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.8 }}>
-            <Typography fontSize={32} fontWeight={900} color="#0f172a" lineHeight={1}>
-              {data.timeAllocated}
-            </Typography>
-            <Typography fontSize={14} fontWeight={600} color="#94a3b8">min</Typography>
+            <Typography fontSize={36} fontWeight={900} color="#0f172a" lineHeight={1}>{data.timeAllocated}</Typography>
+            <Typography fontSize={15} fontWeight={600} color="#94a3b8">min</Typography>
           </Box>
         </Box>
       </Box>

@@ -9,10 +9,8 @@ export const RoadmapPage = ({ isEditable }: Props) => {
   const { nodes, edges } = useRoadmap();
 
   return (
-    <RoadmapFlow
-      nodes={nodes}
-      edges={edges}
-      isEditable={isEditable}
-    />
+    <div style={{ width: '100%', height: '100%', minHeight: 'inherit' }}>
+      <RoadmapFlow nodes={nodes} edges={edges} isEditable={isEditable} />
+    </div>
   );
 };
