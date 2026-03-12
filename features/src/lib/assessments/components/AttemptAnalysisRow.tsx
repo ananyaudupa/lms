@@ -43,36 +43,54 @@ export function AttemptAnalysisRow({ attempt, defaultExpanded = false }: Props) 
         onClick={() => hasData && setExpanded(!expanded)}
         sx={{
           display: 'flex', alignItems: 'center',
-          px: 2.5, py: 2,
+          px: { xs: 1.5, sm: 2.5 },
+          py: { xs: 1.5, sm: 2 },
           cursor: hasData ? 'pointer' : 'default',
           '&:hover': hasData ? { background: '#f8fafc' } : {},
+          gap: { xs: 1, sm: 0 },
         }}
       >
         {/* Icon */}
         <Box sx={{
-          width: 44, height: 44, borderRadius: 2, mr: 2, flexShrink: 0,
+          width: { xs: 36, sm: 44 }, height: { xs: 36, sm: 44 },
+          borderRadius: 2, mr: { xs: 1.5, sm: 2 }, flexShrink: 0,
           background: hasData ? tokens.btnPrimary : '#e2e8f0',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
-          <ArticleIcon sx={{ color: '#fff', fontSize: 22 }} />
+          <ArticleIcon sx={{ color: '#fff', fontSize: { xs: 18, sm: 22 } }} />
         </Box>
 
         {/* Title + date */}
-        <Box sx={{ flex: 1 }}>
-          <Typography fontWeight={800} fontSize={16} color={hasData ? '#0f172a' : '#cbd5e1'}>
-            Attempt {attempt.attemptNumber}  Analysis
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Typography
+            fontWeight={800}
+            color={hasData ? '#0f172a' : '#cbd5e1'}
+            sx={{ fontSize: { xs: 14, sm: 16 } }}
+          >
+            Attempt {attempt.attemptNumber} Analysis
           </Typography>
-          <Typography fontSize={13} color={hasData ? '#64748b' : '#cbd5e1'}>
+          <Typography
+            color={hasData ? '#64748b' : '#cbd5e1'}
+            sx={{ fontSize: { xs: 11, sm: 13 } }}
+          >
             {hasData ? `${attempt.date}  ${attempt.time}` : '----  ----'}
           </Typography>
         </Box>
 
-        {/* Score + chevron */}
-        <Box sx={{ textAlign: 'right', mr: 2 }}>
-          <Typography fontSize={12} color={hasData ? '#64748b' : '#cbd5e1'} fontWeight={500}>
+        {/* Score — hide label on very small screens */}
+        <Box sx={{ textAlign: 'right', mr: { xs: 1, sm: 2 } }}>
+          <Typography
+            color={hasData ? '#64748b' : '#cbd5e1'}
+            fontWeight={500}
+            sx={{ fontSize: { xs: 11, sm: 12 }, display: { xs: 'none', sm: 'block' } }}
+          >
             Total Score
           </Typography>
-          <Typography fontSize={20} fontWeight={900} color={hasData ? '#0f172a' : '#cbd5e1'}>
+          <Typography
+            fontWeight={900}
+            color={hasData ? '#0f172a' : '#cbd5e1'}
+            sx={{ fontSize: { xs: 15, sm: 20 } }}
+          >
             {hasData ? `${attempt.totalScore}` : '---'} / 100
           </Typography>
         </Box>
@@ -93,25 +111,32 @@ export function AttemptAnalysisRow({ attempt, defaultExpanded = false }: Props) 
               <Box key={q.id}>
                 <Box sx={{
                   display: 'flex', alignItems: 'center',
-                  px: 2.5, py: 1.8,
+                  px: { xs: 1.5, sm: 2.5 },
+                  py: { xs: 1.2, sm: 1.8 },
                   borderLeft: `4px solid ${isLow ? '#ef4444' : 'transparent'}`,
                   '&:hover': { background: '#f8fafc' },
                   cursor: 'pointer',
+                  gap: { xs: 1, sm: 0 },
                 }}>
                   {/* Number circle */}
                   <Box sx={{
-                    width: 36, height: 36, borderRadius: '50%', mr: 2, flexShrink: 0,
+                    width: { xs: 30, sm: 36 }, height: { xs: 30, sm: 36 },
+                    borderRadius: '50%', mr: { xs: 1.5, sm: 2 }, flexShrink: 0,
                     border: `2px solid ${colors.border}`,
                     background: colors.bg,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    <Typography fontSize={12} fontWeight={800} color={colors.text}>
+                    <Typography fontSize={11} fontWeight={800} color={colors.text}>
                       {String(q.id).padStart(2, '0')}
                     </Typography>
                   </Box>
 
                   {/* Question label */}
-                  <Typography fontSize={15} fontWeight={600} color="#0f172a" sx={{ flex: 1 }}>
+                  <Typography
+                    fontWeight={600}
+                    color="#0f172a"
+                    sx={{ flex: 1, fontSize: { xs: 13, sm: 15 } }}
+                  >
                     {q.label}
                   </Typography>
 
@@ -119,17 +144,19 @@ export function AttemptAnalysisRow({ attempt, defaultExpanded = false }: Props) 
                   <Box sx={{
                     background: isLow ? '#fff5f5' : '#f0fdf4',
                     border: `1px solid ${isLow ? '#fecaca' : '#bbf7d0'}`,
-                    borderRadius: 2, px: 1.5, py: 0.4, mr: 1.5,
+                    borderRadius: 2,
+                    px: { xs: 1, sm: 1.5 }, py: 0.4,
+                    mr: { xs: 0.5, sm: 1.5 },
                   }}>
                     <Typography fontSize={13} fontWeight={700} color={scoreColor(q.score, q.maxScore)}>
-                      Score:  {q.score}
+                      {q.score}
                     </Typography>
                   </Box>
 
-                  <ChevronRightIcon sx={{ color: '#94a3b8', fontSize: 20 }} />
+                  <ChevronRightIcon sx={{ color: '#94a3b8', fontSize: { xs: 16, sm: 20 } }} />
                 </Box>
                 {idx < attempt.questions.length - 1 && (
-                  <Divider sx={{ borderColor: '#f1f5f9', ml: '72px' }} />
+                  <Divider sx={{ borderColor: '#f1f5f9', ml: { xs: '60px', sm: '72px' } }} />
                 )}
               </Box>
             );

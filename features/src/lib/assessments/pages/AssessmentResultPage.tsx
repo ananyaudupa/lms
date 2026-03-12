@@ -29,14 +29,17 @@ export function AssessmentResultPage({ assessmentId, onBack }: Props) {
     <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden', background: tokens.pageBg }}>
       <DashboardSidebar activePage="Assessments" />
 
-      <Box sx={{ flex: 1, overflowY: 'auto' }}>
-        <Box sx={{ p: 3 }}>
+      <Box sx={{ flex: 1, overflowY: 'auto', minWidth: 0 }}>
+        <Box sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
 
           {/* Header */}
           <Box sx={{
-            background: '#fff', borderRadius: 3, p: 2.5, mb: 3,
+            background: '#fff', borderRadius: 3,
+            p: { xs: 2, sm: 2.5 },
+            mb: 3,
             display: 'flex', alignItems: 'center', gap: 2,
             boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+            flexWrap: 'wrap',
           }}>
             <Box
               component="button"
@@ -51,13 +54,22 @@ export function AssessmentResultPage({ assessmentId, onBack }: Props) {
             >
               <ArrowBackIcon sx={{ fontSize: 20, color: '#475569' }} />
             </Box>
-            <Typography fontWeight={900} fontSize={28} color={tokens.primary}>
+            <Typography
+              fontWeight={900}
+              color={tokens.primary}
+              sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.75rem' } }}
+            >
               {result.title}
             </Typography>
           </Box>
 
-          {/* 3 attempt score cards */}
-          <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+          {/* Attempt score cards — stack on mobile, row on tablet+ */}
+          <Box sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            gap: 2,
+            mb: 3,
+          }}>
             {result.attempts.map((attempt, idx) => (
               <AttemptScoreCard
                 key={attempt.attemptNumber}

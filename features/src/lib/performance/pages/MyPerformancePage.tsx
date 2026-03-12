@@ -20,23 +20,29 @@ export function MyPerformancePage() {
     <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden', background: tokens.pageBg }}>
       <DashboardSidebar activePage="My Performance" />
 
-      <Box sx={{ flex: 1, overflowY: 'auto' }}>
-        <Box sx={{ p: 3 }}>
+      <Box sx={{ flex: 1, overflowY: 'auto', minWidth: 0 }}>
+        <Box sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
 
           {/* Page header */}
           <Box sx={{
-            background: '#fff', borderRadius: 3, p: 3, mb: 3,
+            background: '#fff', borderRadius: 3,
+            p: { xs: 2, sm: 2.5, md: 3 }, mb: 3,
             boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
           }}>
-            <Typography fontWeight={900} fontSize={32} color={BRAND}>
+            <Typography
+              fontWeight={900} color={BRAND}
+              sx={{ fontSize: { xs: '1.3rem', sm: '1.7rem', md: '2rem' } }}
+            >
               My Learning Performance
             </Typography>
-            <Typography fontSize={14} color="#64748b" mt={0.5}>
+            <Typography color="#64748b" mt={0.5}
+              sx={{ fontSize: { xs: 12, sm: 13, md: 14 } }}
+            >
               Track your academic progress and learning efficiency
             </Typography>
           </Box>
 
-          {/* Profile card — always visible */}
+          {/* Profile card */}
           <PerformanceProfileCard />
 
           {/* Tabs */}
@@ -45,7 +51,12 @@ export function MyPerformancePage() {
           {/* Tab content */}
           {activeTab === 'overview' && (
             <>
-              <Box sx={{ display: 'flex', gap: 3 }}>
+              {/* Side-by-side on md+, stacked on mobile */}
+              <Box sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', md: 'row' },
+                gap: 3,
+              }}>
                 <CompetencyOverviewCard />
                 <SkillProficiencyCard />
               </Box>
@@ -53,9 +64,9 @@ export function MyPerformancePage() {
             </>
           )}
 
-          {activeTab === 'courses'         && <CoursesAssessmentsTab />}
-          {activeTab === 'certifications'  && <CertificationsTab />}
-          {activeTab === 'attendance'      && <AttendanceTab />}
+          {activeTab === 'courses'        && <CoursesAssessmentsTab />}
+          {activeTab === 'certifications' && <CertificationsTab />}
+          {activeTab === 'attendance'     && <AttendanceTab />}
 
         </Box>
       </Box>

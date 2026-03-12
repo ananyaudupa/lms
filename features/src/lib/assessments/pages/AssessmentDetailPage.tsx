@@ -42,8 +42,8 @@ export function AssessmentDetailPage({ assessmentId, onBack }: Props) {
     <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden', background: tokens.pageBg }}>
       <DashboardSidebar activePage="Assessments" />
 
-      <Box sx={{ flex: 1, overflowY: 'auto' }}>
-        <Box sx={{ p: 3 }}>
+      <Box sx={{ flex: 1, overflowY: 'auto', minWidth: 0 }}>
+        <Box sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
           <AssessmentHeaderCard
             data={data}
             onBack={onBack}
@@ -62,7 +62,6 @@ export function AssessmentDetailPage({ assessmentId, onBack }: Props) {
         onClose={() => setModalOpen(false)}
         onStart={() => {
           setModalOpen(false);
-          // TODO: navigate to quiz
         }}
         data={data}
       />
