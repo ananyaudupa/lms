@@ -28,17 +28,18 @@ const activities = [
 export function DashboardRightPanel() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      {/* Weekly Goal */}
       <Box sx={{
         background: `linear-gradient(135deg, ${tokens.weeklyGoalFrom} 0%, ${tokens.weeklyGoalTo} 100%)`,
-        borderRadius: 3, p: 3, color: '#fff',
+        borderRadius: 3, p: { xs: 2.5, sm: 3 }, color: '#fff',
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
           <TrackChangesIcon />
-          <Typography fontWeight={700} fontSize={18}>Weekly Goal</Typography>
+          <Typography fontWeight={700} fontSize={{ xs: 16, sm: 18 }}>Weekly Goal</Typography>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-          <Typography fontSize={14} sx={{ opacity: 0.85 }}>Learning Hours</Typography>
-          <Typography fontSize={14} fontWeight={700}>12 / 15h</Typography>
+          <Typography fontSize={{ xs: 13, sm: 14 }} sx={{ opacity: 0.85 }}>Learning Hours</Typography>
+          <Typography fontSize={{ xs: 13, sm: 14 }} fontWeight={700}>12 / 15h</Typography>
         </Box>
         <LinearProgress variant="determinate" value={80} sx={{
           height: 8, borderRadius: 4, background: 'rgba(255,255,255,0.2)', mb: 1.5,
@@ -49,8 +50,13 @@ export function DashboardRightPanel() {
         </Typography>
       </Box>
 
-      <Box sx={{ background: '#fff', borderRadius: 3, p: 3, boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
-        <Typography fontWeight={700} fontSize={18} sx={{ mb: 2.5, color: tokens.textPrimary }}>
+      {/* Recent Activities */}
+      <Box sx={{
+        background: '#fff', borderRadius: 3,
+        p: { xs: 2.5, sm: 3 },
+        boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+      }}>
+        <Typography fontWeight={700} fontSize={{ xs: 16, sm: 18 }} sx={{ mb: 2.5, color: tokens.textPrimary }}>
           Recent Activities
         </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -63,7 +69,8 @@ export function DashboardRightPanel() {
                 {activity.icon}
               </Box>
               <Box>
-                <Typography fontSize={13} fontWeight={600} sx={{ color: tokens.textPrimary, lineHeight: 1.4 }}>
+                <Typography fontSize={{ xs: 12, sm: 13 }} fontWeight={600}
+                  sx={{ color: tokens.textPrimary, lineHeight: 1.4 }}>
                   {activity.title}
                 </Typography>
                 <Typography fontSize={12} sx={{ color: '#94a3b8', mt: 0.3 }}>{activity.time}</Typography>

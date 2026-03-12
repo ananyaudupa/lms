@@ -7,18 +7,19 @@ export function LoginCard() {
   const { values, errors, loading, handleChange, handleSubmit } = useLogin();
 
   return (
-    <Box
-      sx={{
-        position: { xs: 'relative', md: 'absolute' },
-        right: { md: '14%' },
-        top: { md: '50%' },
-        transform: { md: 'translateY(-50%)' },
-        mx: { xs: 'auto', md: 0 },
-        my: { xs: 4, md: 0 },
-        zIndex: 2,
-        width: { xs: '100%', sm: 420, md: 420 },
-      }}
-    >
+    <Box sx={{
+      // Desktop: absolutely positioned on right
+      // Tablet/Mobile: normal flow, centered
+      position: { xs: 'relative', md: 'absolute' },
+      right: { md: '6%' },
+      top: { md: '50%' },
+      transform: { md: 'translateY(-50%)' },
+      mx: { xs: 'auto', md: 0 },
+      my: { xs: 2, md: 0 },
+      zIndex: 2,
+      width: { xs: '100%', sm: '420px', md: '420px' },
+      maxWidth: { xs: '100%', sm: 420 },
+    }}>
       {/* Card */}
       <Box
         component="form"
@@ -43,8 +44,13 @@ export function LoginCard() {
         />
       </Box>
 
-      {/* Button overlays bottom of card — linked to form via form attribute */}
-      <Box sx={{ position: 'absolute', bottom: 32, left: { xs: -12, sm: -24 }, right: { xs: -12, sm: -24 } }}>
+      {/* Button overlays bottom of card */}
+      <Box sx={{
+        position: 'absolute',
+        bottom: 32,
+        left: { xs: -10, sm: -24 },
+        right: { xs: -10, sm: -24 },
+      }}>
         <LoginButton loading={loading} formId="login-form" />
       </Box>
     </Box>

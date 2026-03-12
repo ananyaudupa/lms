@@ -1,61 +1,90 @@
-import { Box, Typography, Stack } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 type Props = { studentsImage?: string };
 
 export function LoginLeftPanel({ studentsImage }: Props) {
   return (
-    <Box
-      sx={{
-        display: { xs: 'none', sm: 'flex' }, // hidden on mobile
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        textAlign: 'left',
-        color: '#fff',
-        width: { sm: '100%', md: '60%' },
-        pl: { sm: 2, md: 6 },
-        pt: { sm: 6, md: 0 },
-        pb: { sm: 4, md: 0 },
-      }}
-    >
-      <Typography variant="h5" sx={{ fontWeight: 400, opacity: 0.8, mb: 1, fontSize: { sm: '1rem', md: '1.5rem' } }}>
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: { xs: 'center', md: 'flex-start' },
+      textAlign: { xs: 'center', md: 'left' },
+      color: '#fff',
+      width: { xs: '100%', md: '60%' },
+      pl: { xs: 0, md: 6 },
+      pt: { xs: 2, md: 0 },
+      pb: { xs: 2, md: 0 },
+    }}>
+      {/* Welcome text */}
+      <Typography sx={{
+        fontWeight: 400, opacity: 0.8, mb: 1,
+        fontSize: { xs: '0.9rem', sm: '1rem', md: '1.5rem' },
+      }}>
         Welcome To
       </Typography>
-      <Typography variant="h4" fontWeight={700} sx={{ mb: 3, lineHeight: 1.3, fontSize: { sm: '1.4rem', md: '2rem' } }}>
+
+      <Typography fontWeight={700} sx={{
+        mb: { xs: 1.5, md: 3 }, lineHeight: 1.3,
+        fontSize: { xs: '1.3rem', sm: '1.5rem', md: '2rem' },
+      }}>
         Synterra's Learning Management System
       </Typography>
-      <Typography variant="body1" sx={{ opacity: 0.8, lineHeight: 1.9, maxWidth: 520, mb: 4, display: { sm: 'none', md: 'block' } }}>
+
+      {/* Description — hidden on mobile */}
+      <Typography sx={{
+        opacity: 0.8, lineHeight: 1.9, maxWidth: 520, mb: 4,
+        display: { xs: 'none', md: 'block' },
+        fontSize: '1rem',
+      }}>
         Unlock your potential with personalized learning paths, expert-led courses,
         and a community dedicated to your success.
       </Typography>
 
-      <Stack
-        direction="row"
-        alignItems="flex-start"
-        justifyContent="space-between"
-        sx={{ width: '100%', maxWidth: 620 }}
-      >
+      {/* Stats row + image */}
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: { xs: 'center', md: 'space-between' },
+        gap: { xs: 4, md: 0 },
+        width: '100%',
+        maxWidth: { xs: 320, md: 620 },
+      }}>
         {/* Left stat */}
-        <Box textAlign="left" sx={{ minWidth: { sm: 80, md: 100 } }}>
-          <Typography variant="h2" fontWeight={700} sx={{ lineHeight: 1, fontSize: { sm: '2rem', md: '3.75rem' } }}>310+</Typography>
-          <Typography variant="body1" sx={{ opacity: 0.85, mt: 0.5 }}>Students</Typography>
+        <Box textAlign={{ xs: 'center', md: 'left' }}>
+          <Typography fontWeight={700} sx={{
+            lineHeight: 1,
+            fontSize: { xs: '2rem', sm: '2.5rem', md: '3.75rem' },
+          }}>310+</Typography>
+          <Typography sx={{ opacity: 0.85, mt: 0.5, fontSize: { xs: '0.85rem', md: '1rem' } }}>
+            Students
+          </Typography>
         </Box>
 
-        {/* Center image — hidden on tablet */}
+        {/* Center image — desktop only */}
         {studentsImage && (
           <Box
             component="img"
             src={studentsImage}
             alt="Students"
-            sx={{ width: { sm: 280, md: 480 }, display: { sm: 'none', md: 'block' } }}
+            sx={{
+              display: { xs: 'none', md: 'block' },
+              width: { md: 400, lg: 480 },
+            }}
           />
         )}
 
         {/* Right stat */}
-        <Box textAlign="right" sx={{ minWidth: { sm: 100, md: 130 } }}>
-          <Typography variant="h2" fontWeight={700} sx={{ lineHeight: 1, fontSize: { sm: '2rem', md: '3.75rem' } }}>95%</Typography>
-          <Typography variant="body1" sx={{ opacity: 0.85, mt: 0.5 }}>Success Rate</Typography>
+        <Box textAlign={{ xs: 'center', md: 'right' }}>
+          <Typography fontWeight={700} sx={{
+            lineHeight: 1,
+            fontSize: { xs: '2rem', sm: '2.5rem', md: '3.75rem' },
+          }}>95%</Typography>
+          <Typography sx={{ opacity: 0.85, mt: 0.5, fontSize: { xs: '0.85rem', md: '1rem' } }}>
+            Success Rate
+          </Typography>
         </Box>
-      </Stack>
+      </Box>
     </Box>
   );
 }

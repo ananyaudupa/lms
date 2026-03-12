@@ -8,21 +8,36 @@ import { tokens } from '@org/shared';
 
 export function DashboardPage() {
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', background: tokens.pageBg }}>
+   <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden', background: tokens.pageBg }}>
       <DashboardSidebar activePage="Dashboard" />
-      <Box sx={{ flex: 1, p: { xs: 2, md: 4 }, overflowY: 'auto' }}>
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" fontWeight={800} sx={{ color: tokens.primary, mb: 0.5 }}>
+
+      <Box sx={{ flex: 1, p: { xs: 2, sm: 3, md: 4 }, overflowY: 'auto', minWidth: 0 }}>
+        {/* Header */}
+        <Box sx={{ mb: { xs: 2.5, md: 4 } }}>
+          <Typography
+            fontWeight={800}
+            sx={{ color: tokens.primary, mb: 0.5, fontSize: { xs: '1.4rem', sm: '1.7rem', md: '2rem' } }}
+          >
             Welcome, Adam!
           </Typography>
-          <Typography sx={{ color: tokens.textMuted, fontSize: 15 }}>
+          <Typography sx={{ color: tokens.textMuted, fontSize: { xs: 13, md: 15 } }}>
             Continue your learning journey and achieve your skills
           </Typography>
         </Box>
-        <Box sx={{ mb: 4 }}><DashboardStatsCards /></Box>
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, lg: 8 }}><DashboardContinueLearning /></Grid>
-          <Grid size={{ xs: 12, lg: 4 }}><DashboardRightPanel /></Grid>
+
+        {/* Stats cards */}
+        <Box sx={{ mb: { xs: 2.5, md: 4 } }}>
+          <DashboardStatsCards />
+        </Box>
+
+        {/* Main content grid */}
+        <Grid container spacing={{ xs: 2, md: 3 }}>
+          <Grid size={{ xs: 12, lg: 8 }}>
+            <DashboardContinueLearning />
+          </Grid>
+          <Grid size={{ xs: 12, lg: 4 }}>
+            <DashboardRightPanel />
+          </Grid>
         </Grid>
       </Box>
     </Box>

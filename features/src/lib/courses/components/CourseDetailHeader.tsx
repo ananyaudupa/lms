@@ -17,12 +17,20 @@ type Props = {
 export function CourseDetailHeader({ title, description, image, progress, createdDate, duration, onBack }: Props) {
   return (
     <Box sx={{
-      background: tokens.cardBg, borderRadius: 3, p: 3, mb: 3,
+      background: tokens.cardBg, borderRadius: 3, p: { xs: 2, sm: 3 }, mb: 3,
       boxShadow: tokens.courseCardShadow,
-      display: 'flex', alignItems: 'flex-start', gap: 3,
+      display: 'flex',
+      flexDirection: { xs: 'column', sm: 'row' },
+      alignItems: { xs: 'stretch', sm: 'flex-start' },
+      gap: { xs: 2, sm: 3 },
     }}>
       {/* Image with back button */}
-      <Box sx={{ position: 'relative', flexShrink: 0, width: 200, height: 160, borderRadius: 2, overflow: 'hidden' }}>
+      <Box sx={{
+        position: 'relative', flexShrink: 0,
+        width: { xs: '100%', sm: 200 },
+        height: { xs: 180, sm: 160 },
+        borderRadius: 2, overflow: 'hidden',
+      }}>
         <Box component="img" src={image} alt={title}
           sx={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         <Box onClick={onBack} sx={{
@@ -37,14 +45,14 @@ export function CourseDetailHeader({ title, description, image, progress, create
       </Box>
 
       {/* Title + description */}
-      <Box sx={{ flex: 1 }}>
-        <Typography variant="h4" fontWeight={800} sx={{ color: tokens.textPrimary, mb: 1 }}>
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Typography fontWeight={800} sx={{ color: tokens.textPrimary, mb: 1, fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' } }}>
           {title}
         </Typography>
-        <Typography sx={{ color: tokens.textMuted, fontSize: 14, lineHeight: 1.7, mb: 2, textAlign: 'justify' }}>
+        <Typography sx={{ color: tokens.textMuted, fontSize: { xs: 13, md: 14 }, lineHeight: 1.7, mb: 2, textAlign: 'justify' }}>
           {description}
         </Typography>
-        <Box sx={{ display: 'flex', gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, border: `1px solid ${tokens.borderColor}`, borderRadius: 2, px: 1.5, py: 0.6 }}>
             <CalendarTodayIcon sx={{ fontSize: 15, color: tokens.textMuted }} />
             <Typography fontSize={13} color={tokens.textMuted}>Created: {createdDate}</Typography>
@@ -56,8 +64,12 @@ export function CourseDetailHeader({ title, description, image, progress, create
         </Box>
       </Box>
 
-      {/* Circular progress */}
-      <Box sx={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {/* Circular progress — inline on mobile, side on desktop */}
+      <Box sx={{
+        flexShrink: 0,
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
+        alignSelf: { xs: 'center', sm: 'flex-start' },
+      }}>
         <Box sx={{ position: 'relative', width: 90, height: 90 }}>
           <svg width="90" height="90" style={{ transform: 'rotate(-90deg)' }}>
             <circle cx="45" cy="45" r="38" fill="none" stroke={tokens.borderColor} strokeWidth="7" />

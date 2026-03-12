@@ -11,3 +11,4 @@ export { DashboardPage } from './lib/dashboard/pages/DashboardPage';
 export { CoursesPage } from './lib/courses/pages/CoursesPage';
 export { CourseDetailPageWrapper } from './lib/courses/pages/Coursedetailpagewrapper';
 export { AssessmentsListPage } from './lib/assessments/pages/AssessmentsListPage';
+export { MyPerformancePage } from './lib/performance/pages/MyPerformancePage';

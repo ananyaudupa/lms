@@ -2,12 +2,11 @@ import { Box, Typography } from '@mui/material';
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import { CourseProgressCard } from './ProgressCard';
 import { findCourse } from '@org/shared';
-// Dashboard picks these 3 courses — data comes from the shared courses.data.ts
+
 const dashboardCourses = [
-  { title: 'Data Engineer', status: 'finished' as const },
-  { title: 'Frontend',      status: 'continue' as const },
+  { title: 'Data Engineer',         status: 'finished' as const },
+  { title: 'Frontend',              status: 'continue' as const },
   { title: 'Git & Version Control', status: 'start' as const,
-    // fallback for courses not in the main list
     fallback: {
       description: 'Master version control with Git — branching, merging, pull requests, and collaborative workflows.',
       image: 'https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=120&h=90&fit=crop',
@@ -19,11 +18,21 @@ const dashboardCourses = [
 export function DashboardContinueLearning() {
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5 }}>
-        <Typography variant="h6" fontWeight={700} sx={{ color: '#1a1a2e' }}>Continue Learning</Typography>
+      {/* Header */}
+      <Box sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', sm: 'row' },
+        justifyContent: 'space-between',
+        alignItems: { xs: 'flex-start', sm: 'center' },
+        gap: { xs: 0.5, sm: 0 },
+        mb: 2.5,
+      }}>
+        <Typography variant="h6" fontWeight={700} sx={{ color: '#1a1a2e', fontSize: { xs: 16, sm: 18 } }}>
+          Continue Learning
+        </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: '#000' }}>
           <PsychologyIcon fontSize="small" />
-          <Typography fontSize={16}>Keep the Momentum</Typography>
+          <Typography fontSize={{ xs: 13, sm: 15 }}>Keep the Momentum</Typography>
         </Box>
       </Box>
 

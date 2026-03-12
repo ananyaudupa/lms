@@ -12,7 +12,7 @@ const DashboardPage       = lazy(() => import('@org/features').then(m => ({ defa
 const CoursesPage         = lazy(() => import('@org/features').then(m => ({ default: m.CoursesPage })));
 const CourseDetailWrapper = lazy(() => import('@org/features').then(m => ({ default: m.CourseDetailPageWrapper })));
 const AssessmentsListPage = lazy(() => import('@org/features').then(m => ({ default: m.AssessmentsListPage })));
-
+const MyPerformancePage = lazy(() => import('@org/features').then(m => ({ default: m.MyPerformancePage })));
 export default function App() {
   return (
     <Routes>
@@ -22,6 +22,7 @@ export default function App() {
       <Route path="/course-detail" element={<CourseDetailWrapper />} />
       <Route path="/assessments"   element={<AssessmentsListPage />} />
       <Route path="*"              element={<Navigate to="/login" replace />} />
+      <Route path="/performance" element={<MyPerformancePage />} />
     </Routes>
   );
 }

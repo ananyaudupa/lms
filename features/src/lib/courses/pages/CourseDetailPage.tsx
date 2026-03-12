@@ -37,9 +37,8 @@ export function CourseDetailPage({ course, onBack }: Props) {
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: tokens.pageBg }}>
       <DashboardSidebar activePage="Courses" />
 
-      {/* Right side — fully scrollable */}
       <div style={{ flex: 1, overflowY: 'auto', minWidth: 0 }}>
-        <div style={{ padding: '24px 24px 0 24px' }}>
+        <Box sx={{ p: { xs: '16px 16px 0', sm: '20px 20px 0', md: '24px 24px 0' } }}>
 
           <CourseDetailHeader
             title={`${course.title} Developer`}
@@ -61,21 +60,29 @@ export function CourseDetailPage({ course, onBack }: Props) {
               background: tokens.btnPrimary, borderRadius: 2, p: 1.2,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <MenuBookIcon sx={{ color: '#fff', fontSize: 26 }} />
+              <MenuBookIcon sx={{ color: '#fff', fontSize: { xs: 20, sm: 26 } }} />
             </Box>
             <Box>
-              <Typography variant="h5" fontWeight={800} sx={{ color: tokens.primary }}>Course Contents</Typography>
+              <Typography fontWeight={800} sx={{ color: tokens.primary, fontSize: { xs: '1rem', sm: '1.25rem' } }}>
+                Course Contents
+              </Typography>
               <Typography fontSize={13} color={tokens.textMuted}>61 lessons • 4 weeks total length</Typography>
             </Box>
           </Box>
+        </Box>
 
-        </div>
-
-        {/* Roadmap — fixed tall height, user scrolls page to see more */}
-        <div style={{ margin: '0 24px 24px 24px', borderRadius: 12, overflow: 'hidden', height: 2200, background: '#f1f5f9', boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}>
+        <Box sx={{
+          mx: { xs: '16px', sm: '20px', md: '24px' },
+          mb: '24px',
+          borderRadius: 3,
+          overflow: 'hidden',
+          background: '#f1f5f9',
+          boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+          position: 'relative',                          // anchors absolute child
+          height: { xs: '70vh', sm: '75vh', md: '78vh' }, // real pixel height for ResizeObserver
+        }}>
           <RoadmapPage isEditable={false} />
-        </div>
-
+        </Box>
       </div>
     </div>
   );

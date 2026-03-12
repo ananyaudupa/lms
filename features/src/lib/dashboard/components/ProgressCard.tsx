@@ -22,14 +22,27 @@ export function CourseProgressCard({ title, progress, status, image, description
 
   return (
     <Box sx={{
-      background: '#fff', borderRadius: 3, p: 2.5, display: 'flex',
-      alignItems: 'center', gap: 2.5, boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
-      transition: 'box-shadow 0.2s', '&:hover': { boxShadow: '0 4px 20px rgba(0,0,0,0.1)' },
+      background: '#fff', borderRadius: 3, p: { xs: 2, sm: 2.5 },
+      display: 'flex',
+      flexDirection: { xs: 'column', sm: 'row' },
+      alignItems: { xs: 'flex-start', sm: 'center' },
+      gap: { xs: 1.5, sm: 2.5 },
+      boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+      transition: 'box-shadow 0.2s',
+      '&:hover': { boxShadow: '0 4px 20px rgba(0,0,0,0.1)' },
     }}>
-      <Box component="img" src={image} alt={title}
-        sx={{ width: 100, height: 75, borderRadius: 2, objectFit: 'cover', flexShrink: 0 }} />
-      <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography fontWeight={700} fontSize={17} sx={{ mb: 1.5, color: tokens.textPrimary }}>
+      {/* Image */}
+      <Box component="img" src={image} alt={title} sx={{
+        width: { xs: '100%', sm: 100 },
+        height: { xs: 160, sm: 75 },
+        borderRadius: 2,
+        objectFit: 'cover',
+        flexShrink: 0,
+      }} />
+
+      {/* Content */}
+      <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
+        <Typography fontWeight={700} fontSize={{ xs: 15, sm: 17 }} sx={{ mb: 1.5, color: tokens.textPrimary }}>
           {title}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
@@ -48,7 +61,12 @@ export function CourseProgressCard({ title, progress, status, image, description
           },
         }} />
       </Box>
-      <Box sx={{ flexShrink: 0 }} onClick={handleClick} style={{ cursor: 'pointer' }}>
+
+      {/* Button */}
+      <Box
+        sx={{ flexShrink: 0, width: { xs: '100%', sm: 'auto' }, cursor: 'pointer' }}
+        onClick={handleClick}
+      >
         <CourseActionButton status={status} />
       </Box>
     </Box>

@@ -12,20 +12,18 @@ type Props = {
 
 export function StatCard({ label, value, sub, subIcon, icon, bg }: Props) {
   return (
-    <Box
-      sx={{
-        background: bg,
-        borderRadius: 3,
-        p: 2.5,
-        position: 'relative',
-        overflow: 'hidden',
-        color: '#fff',
-        minHeight: 130,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-      }}
-    >
+    <Box sx={{
+      background: bg,
+      borderRadius: 3,
+      p: { xs: 2, sm: 2.5 },
+      position: 'relative',
+      overflow: 'hidden',
+      color: '#fff',
+      minHeight: { xs: 110, sm: 130 },
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+    }}>
       {/* Decorative circles */}
       <Box sx={{ position: 'absolute', right: -25, top: -25, width: 110, height: 110, borderRadius: '50%', background: 'rgba(255,255,255,0.25)' }} />
       <Box sx={{ position: 'absolute', right: 18, top: 18, width: 65, height: 65, borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
@@ -34,12 +32,12 @@ export function StatCard({ label, value, sub, subIcon, icon, bg }: Props) {
       {/* Top row */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative', zIndex: 1 }}>
         <Box sx={{ background: 'rgba(255,255,255,0.2)', borderRadius: 2, p: 0.8 }}>{icon}</Box>
-        <Typography sx={{ fontSize: 40, fontWeight: 800, lineHeight: 1 }}>{value}</Typography>
+        <Typography sx={{ fontSize: { xs: 30, sm: 40 }, fontWeight: 800, lineHeight: 1 }}>{value}</Typography>
       </Box>
 
       {/* Bottom */}
       <Box sx={{ position: 'relative', zIndex: 1 }}>
-        <Typography sx={{ fontWeight: 700, fontSize: 15, mb: 0.5 }}>{label}</Typography>
+        <Typography sx={{ fontWeight: 700, fontSize: { xs: 13, sm: 15 }, mb: 0.5 }}>{label}</Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, opacity: 0.85 }}>
           {subIcon}
           <Typography sx={{ fontSize: 12 }}>{sub}</Typography>

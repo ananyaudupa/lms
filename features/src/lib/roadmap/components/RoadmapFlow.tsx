@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState, useRef } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
 import {
   ReactFlow, ReactFlowProvider, Background, Controls,
   useNodesState, useEdgesState, useReactFlow,
@@ -11,13 +11,25 @@ import { InlineNodeInput, NewNodeType } from './InlineNodeInput';
 import { NodePanel } from './NodePanel';
 import { Toast } from './Toast';
 import { getNodeContent } from '../data/node.data';
+import { resolveCollisions } from './resolve-collisions';
 
-// Inject animated dash CSS once
 const styleTag = document.createElement('style');
 styleTag.textContent = `
   @keyframes dashFlow {
     from { stroke-dashoffset: 20; }
     to   { stroke-dashoffset: 0; }
+  }
+  .react-flow__controls {
+    bottom: 16px !important;
+    left: 16px !important;
+  }
+  @media (max-width: 640px) {
+    .react-flow__controls {
+      bottom: 10px !important;
+      left: 10px !important;
+      transform: scale(0.85);
+      transform-origin: bottom left;
+    }
   }
 `;
 document.head.appendChild(styleTag);
@@ -39,70 +51,102 @@ function styleEdge(e: Edge): Edge {
 
 const nodeTypes = { custom: CustomNode };
 
+const NODE_W = 160;
+const NODE_H = 40;
+
 type RoadmapFlowProps = {
   nodes: Node[];
   edges: Edge[];
   isEditable: boolean;
+  containerWidth: number;
+  containerHeight: number;
 };
 
 type SelectedNode = { id: string; label: string } | null;
 type ToastData    = { id: number; nodeLabel: string; x: number; y: number } | null;
 type PendingNode  = { sourceNodeId: string } | null;
-
 const SPACING = 120;
+
+function computeViewport(
+  nodes: Node[],
+  containerW: number,
+  containerH: number,
+  padding = 24,
+): { x: number; y: number; zoom: number } {
+  if (!nodes.length || containerW <= 0 || containerH <= 0) return { x: 0, y: 0, zoom: 0.5 };
+
+  const minX = Math.min(...nodes.map(n => n.position.x));
+  const minY = Math.min(...nodes.map(n => n.position.y));
+  const maxX = Math.max(...nodes.map(n => n.position.x)) + NODE_W;
+  const maxY = Math.max(...nodes.map(n => n.position.y)) + NODE_H;
+
+  const contentW = maxX - minX;
+  const contentH = maxY - minY;
+
+  const scaleX = (containerW - padding * 2) / contentW;
+  const scaleY = (containerH - padding * 2) / contentH;
+  const zoom   = Math.min(scaleX, scaleY, 1.3);
+
+  const x = (containerW - contentW * zoom) / 2 - minX * zoom;
+  const y = padding - minY * zoom;
+
+  return { x, y, zoom };
+}
 
 function getAutoSide(sourceNodeId: string, nodes: Node[], edges: Edge[]): 'left' | 'right' {
   const sourceNode = nodes.find(n => n.id === sourceNodeId);
   if (!sourceNode) return 'right';
-
   const childIds = edges.filter(e => e.source === sourceNodeId).map(e => e.target);
-  let leftCount = 0;
-  let rightCount = 0;
-
+  let leftCount = 0, rightCount = 0;
   childIds.forEach(id => {
     const child = nodes.find(n => n.id === id);
     if (!child) return;
     if (child.position.x < sourceNode.position.x) leftCount++;
     else rightCount++;
   });
-
   return leftCount <= rightCount ? 'left' : 'right';
 }
 
-function FlowContent({ nodes, edges, isEditable }: RoadmapFlowProps) {
+function FlowContent({ nodes, edges, isEditable, containerWidth, containerHeight }: RoadmapFlowProps) {
   const [selectedNode, setSelectedNode]     = useState<SelectedNode>(null);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [toast, setToast]                   = useState<ToastData>(null);
   const [pendingNode, setPendingNode]       = useState<PendingNode>(null);
   const [inputScreenPos, setInputScreenPos] = useState<{ x: number; y: number } | null>(null);
-  const flowWrapper                         = useRef<HTMLDivElement>(null);
-  const { fitView, getViewport }            = useReactFlow();
+  const [isMobile, setIsMobile]             = useState(window.innerWidth < 768);
+
+  const flowWrapper              = useRef<HTMLDivElement>(null);
+  const { getViewport, setViewport } = useReactFlow();
 
   const flowNodesRef = useRef<Node[]>([]);
   const flowEdgesRef = useRef<Edge[]>([]);
 
-  const [flowNodes, setFlowNodes, onNodesChange] = useNodesState(
-    nodes.map(n => ({
-      ...n,
-      data: { ...n.data, isEditable },
-    }))
-  );
+  // Compute initial viewport from known container dimensions
+  const initialViewport = computeViewport(nodes, containerWidth, containerHeight);
 
-  const [flowEdges, setFlowEdges] = useEdgesState(
-    edges.map(e => styleEdge(e))
+  const [flowNodes, setFlowNodes, onNodesChange] = useNodesState(
+    nodes.map(n => ({ ...n, data: { ...n.data, isEditable } }))
   );
+  const [flowEdges, setFlowEdges] = useEdgesState(edges.map(e => styleEdge(e)));
 
   useEffect(() => { flowNodesRef.current = flowNodes; }, [flowNodes]);
   useEffect(() => { flowEdgesRef.current = flowEdges; }, [flowEdges]);
 
-
+  useEffect(() => {
+    setFlowNodes(prev => prev.map(n => ({ ...n, data: { ...n.data, isEditable } })));
+  }, [isEditable]);
 
   useEffect(() => {
-    setFlowNodes(prev => prev.map(n => ({
-      ...n,
-      data: { ...n.data, isEditable },
-    })));
-  }, [isEditable]);
+    const check = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  // Re-apply viewport when container dimensions change (resize/rotate)
+  useEffect(() => {
+    const vp = computeViewport(nodes, containerWidth, containerHeight);
+    setViewport(vp, { duration: 200 });
+  }, [containerWidth, containerHeight, nodes, setViewport]);
 
   const handleNodeClick = useCallback((_e: React.MouseEvent, node: Node) => {
     if (pendingNode) return;
@@ -111,149 +155,67 @@ function FlowContent({ nodes, edges, isEditable }: RoadmapFlowProps) {
   }, [pendingNode]);
 
   const handleNodeDragStop: NodeDragHandler = useCallback((_e, node) => {
-    setToast({
-      id: Date.now(),
-      nodeLabel: node.data.label,
-      x: node.position.x,
-      y: node.position.y,
-    });
+    setFlowNodes(nds =>
+      resolveCollisions(nds, { maxIterations: Infinity, overlapThreshold: 0.5, margin: 15 })
+    );
+    setToast({ id: Date.now(), nodeLabel: node.data.label, x: node.position.x, y: node.position.y });
   }, []);
 
   const handleConfirmNewNode = useCallback((label: string, nodeType: NewNodeType) => {
     if (!pendingNode) return;
-
-    const newNodeId = `node-${Date.now()}`;
+    const newNodeId  = `node-${Date.now()}`;
     const sourceNode = flowNodesRef.current.find(n => n.id === pendingNode.sourceNodeId);
     if (!sourceNode) return;
-
     const srcX = sourceNode.position.x;
     const srcY = sourceNode.position.y;
 
     if (nodeType === 'root') {
-      const bottomEdge = flowEdgesRef.current.find(
-        e => e.source === pendingNode.sourceNodeId && e.sourceHandle === 'bottom'
-      );
-      const targetNode = bottomEdge
-        ? flowNodesRef.current.find(n => n.id === bottomEdge.target)
-        : null;
-      const tgtY = targetNode?.position.y ?? srcY + 150;
-      const newPosition = {
-        x: srcX,
-        y: srcY + Math.max((tgtY - srcY) / 2, 80),
-      };
-
+      const bottomEdge  = flowEdgesRef.current.find(e => e.source === pendingNode.sourceNodeId && e.sourceHandle === 'bottom');
+      const targetNode  = bottomEdge ? flowNodesRef.current.find(n => n.id === bottomEdge.target) : null;
+      const tgtY        = targetNode?.position.y ?? srcY + 150;
+      const newPosition = { x: srcX, y: srcY + Math.max((tgtY - srcY) / 2, 80) };
       if (bottomEdge) {
-        setFlowEdges(prev => {
-          const filtered = prev.filter(e => e.id !== bottomEdge.id);
-          return [
-            ...filtered,
-            styleEdge({
-              id: `e-${pendingNode.sourceNodeId}-${newNodeId}`,
-              source: pendingNode.sourceNodeId,
-              target: newNodeId,
-              sourceHandle: 'bottom',
-              targetHandle: 'top',
-              data: { variant: 'solid' },
-            }),
-            styleEdge({
-              id: `e-${newNodeId}-${bottomEdge.target}`,
-              source: newNodeId,
-              target: bottomEdge.target,
-              sourceHandle: 'bottom',
-              targetHandle: 'top',
-              data: { variant: 'solid' },
-            }),
-          ];
-        });
-      } else {
         setFlowEdges(prev => [
-          ...prev,
-          styleEdge({
-            id: `e-${pendingNode.sourceNodeId}-${newNodeId}`,
-            source: pendingNode.sourceNodeId,
-            target: newNodeId,
-            sourceHandle: 'bottom',
-            targetHandle: 'top',
-            data: { variant: 'solid' },
-          }),
+          ...prev.filter(e => e.id !== bottomEdge.id),
+          styleEdge({ id: `e-${pendingNode.sourceNodeId}-${newNodeId}`, source: pendingNode.sourceNodeId, target: newNodeId, sourceHandle: 'bottom', targetHandle: 'top', data: { variant: 'solid' } }),
+          styleEdge({ id: `e-${newNodeId}-${bottomEdge.target}`, source: newNodeId, target: bottomEdge.target, sourceHandle: 'bottom', targetHandle: 'top', data: { variant: 'solid' } }),
+        ]);
+      } else {
+        setFlowEdges(prev => [...prev,
+          styleEdge({ id: `e-${pendingNode.sourceNodeId}-${newNodeId}`, source: pendingNode.sourceNodeId, target: newNodeId, sourceHandle: 'bottom', targetHandle: 'top', data: { variant: 'solid' } }),
         ]);
       }
-
       setFlowNodes(prev => {
-        const shifted = prev.map(n => {
-          if (n.id === pendingNode.sourceNodeId) return n;
-          if (n.position.y > srcY) {
-            return { ...n, position: { ...n.position, y: n.position.y + SPACING } };
-          }
-          return n;
-        });
-        return [
-          ...shifted,
-          {
-            id: newNodeId,
-            type: 'custom',
-            position: newPosition,
-            data: { label, variant: 'spine', isEditable },
-          },
-        ];
+        const shifted = prev.map(n =>
+          n.id !== pendingNode.sourceNodeId && n.position.y > srcY
+            ? { ...n, position: { ...n.position, y: n.position.y + SPACING } } : n
+        );
+        return [...shifted, { id: newNodeId, type: 'custom', position: newPosition, data: { label, variant: 'spine', isEditable } }];
       });
-
     } else {
-      const side = getAutoSide(
-        pendingNode.sourceNodeId,
-        flowNodesRef.current,
-        flowEdgesRef.current
-      );
-
-      const sourceHandle = side === 'left' ? 'left'         : 'right';
+      const side         = getAutoSide(pendingNode.sourceNodeId, flowNodesRef.current, flowEdgesRef.current);
+      const sourceHandle = side === 'left' ? 'left' : 'right';
       const targetHandle = side === 'left' ? 'right-target' : 'left-target';
-
       const siblingsOnSide = flowEdgesRef.current
         .filter(e => e.source === pendingNode.sourceNodeId)
         .map(e => flowNodesRef.current.find(n => n.id === e.target))
-        .filter((n): n is Node => !!n && (
-          side === 'left' ? n.position.x < srcX : n.position.x > srcX
-        ));
-
-      const lowestY = siblingsOnSide.length > 0
-        ? Math.max(...siblingsOnSide.map(n => n.position.y)) + 60
-        : srcY;
-
-      const newPosition = {
-        x: side === 'left' ? srcX - 220 : srcX + 220,
-        y: lowestY,
-      };
-
-      setFlowEdges(prev => [
-        ...prev,
-        styleEdge({
-          id: `e-${pendingNode.sourceNodeId}-${newNodeId}`,
-          source: pendingNode.sourceNodeId,
-          target: newNodeId,
-          sourceHandle,
-          targetHandle,
-          data: { variant: 'dashed' },
-        }),
+        .filter((n): n is Node => !!n && (side === 'left' ? n.position.x < srcX : n.position.x > srcX));
+      const lowestY     = siblingsOnSide.length > 0 ? Math.max(...siblingsOnSide.map(n => n.position.y)) + 60 : srcY;
+      const newPosition = { x: side === 'left' ? srcX - 220 : srcX + 220, y: lowestY };
+      setFlowEdges(prev => [...prev,
+        styleEdge({ id: `e-${pendingNode.sourceNodeId}-${newNodeId}`, source: pendingNode.sourceNodeId, target: newNodeId, sourceHandle, targetHandle, data: { variant: 'dashed' } }),
       ]);
-
-      setFlowNodes(prev => [
-        ...prev,
-        {
-          id: newNodeId,
-          type: 'custom',
-          position: newPosition,
-          data: { label, variant: 'side', isEditable },
-        },
+      setFlowNodes(prev => [...prev,
+        { id: newNodeId, type: 'custom', position: newPosition, data: { label, variant: 'side', isEditable } },
       ]);
     }
-
     setPendingNode(null);
     setInputScreenPos(null);
   }, [pendingNode, isEditable]);
 
   const addButtonPos = selectedNodeId && isEditable && !pendingNode
     ? (() => {
-        const node = flowNodesRef.current.find(n => n.id === selectedNodeId);
+        const node   = flowNodesRef.current.find(n => n.id === selectedNodeId);
         if (!node) return null;
         const bounds = flowWrapper.current?.getBoundingClientRect();
         if (!bounds) return null;
@@ -266,7 +228,6 @@ function FlowContent({ nodes, edges, isEditable }: RoadmapFlowProps) {
     : null;
 
   return (
-    // ← KEY CHANGE: relative + width/height 100% instead of fixed + inset 0
     <div ref={flowWrapper} style={{ position: 'relative', width: '100%', height: '100%' }}>
       <ReactFlow
         nodes={flowNodes}
@@ -274,80 +235,56 @@ function FlowContent({ nodes, edges, isEditable }: RoadmapFlowProps) {
         onNodesChange={isEditable ? onNodesChange : undefined}
         onEdgesChange={undefined}
         nodeTypes={nodeTypes}
-        nodesDraggable={isEditable}
+        nodesDraggable={isEditable && !isMobile}
         nodesConnectable={false}
         elementsSelectable={true}
         onNodeClick={handleNodeClick}
+        onNodeDragStop={isEditable && !isMobile ? handleNodeDragStop : undefined}
         onPaneClick={() => {
-          if (pendingNode) {
-            setPendingNode(null);
-            setInputScreenPos(null);
-            return;
-          }
+          if (pendingNode) { setPendingNode(null); setInputScreenPos(null); return; }
           setSelectedNode(null);
           setSelectedNodeId(null);
         }}
-        onNodeDragStop={isEditable ? handleNodeDragStop : undefined}
-        minZoom={0.15}
+        minZoom={0.05}
         maxZoom={2.5}
         panOnDrag={true}
         zoomOnScroll={false}
         zoomOnPinch={true}
         panOnScroll={true}
-        
-        defaultViewport={{ x: -100, y: 20, zoom: 1.2}}
+        defaultViewport={initialViewport}
         style={{ background: '#f1f5f9', width: '100%', height: '100%' }}
       >
         <Background gap={18} size={1} color="#cbd5e1" />
-        <Controls />
+        <Controls showInteractive={false} />
       </ReactFlow>
 
-      {isEditable && selectedNodeId && addButtonPos && !pendingNode && (
+      {isEditable && !isMobile && selectedNodeId && addButtonPos && !pendingNode && (
         <div
           onMouseDown={e => {
             e.stopPropagation();
-            if (!addButtonPos) return;
-            setInputScreenPos({
-              x: addButtonPos.x,
-              y: addButtonPos.y + 20,
-            });
+            setInputScreenPos({ x: addButtonPos.x, y: addButtonPos.y + 20 });
             setPendingNode({ sourceNodeId: selectedNodeId });
           }}
           style={{
-            position: 'fixed',
-            left: addButtonPos.x,
-            top: addButtonPos.y,
-            transform: 'translate(-50%, 0)',
-            width: 16, height: 16,
-            borderRadius: '50%',
-            background: '#2563eb',
-            border: '2px solid #ffffff',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 11,
-            color: '#ffffff',
-            fontWeight: 700,
-            boxShadow: '0 2px 6px rgba(37,99,235,0.5)',
-            zIndex: 50,
-            userSelect: 'none',
-            transition: 'transform 0.15s',
+            position: 'fixed', left: addButtonPos.x, top: addButtonPos.y,
+            transform: 'translate(-50%, 0)', width: 16, height: 16,
+            borderRadius: '50%', background: '#2563eb', border: '2px solid #ffffff',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 11, color: '#ffffff', fontWeight: 700,
+            boxShadow: '0 2px 6px rgba(37,99,235,0.5)', zIndex: 50,
+            userSelect: 'none', transition: 'transform 0.15s',
           }}
           onMouseOver={e => (e.currentTarget.style.transform = 'translate(-50%, 0) scale(1.4)')}
           onMouseOut={e => (e.currentTarget.style.transform = 'translate(-50%, 0) scale(1)')}
         >+</div>
       )}
 
-      {isEditable && pendingNode && inputScreenPos && (
+      {isEditable && !isMobile && pendingNode && inputScreenPos && (
         <InlineNodeInput
           x={inputScreenPos.x}
           y={inputScreenPos.y}
           onConfirm={handleConfirmNewNode}
-          onCancel={() => {
-            setPendingNode(null);
-            setInputScreenPos(null);
-          }}
+          onCancel={() => { setPendingNode(null); setInputScreenPos(null); }}
         />
       )}
 
@@ -355,21 +292,12 @@ function FlowContent({ nodes, edges, isEditable }: RoadmapFlowProps) {
         <NodePanel
           label={selectedNode.label}
           content={getNodeContent(selectedNode.label)}
-          onClose={() => {
-            setSelectedNode(null);
-            setSelectedNodeId(null);
-          }}
+          onClose={() => { setSelectedNode(null); setSelectedNodeId(null); }}
         />
       )}
 
-      {isEditable && toast && (
-        <Toast
-          key={toast.id}
-          nodeLabel={toast.nodeLabel}
-          x={toast.x}
-          y={toast.y}
-          onDone={() => setToast(null)}
-        />
+      {isEditable && !isMobile && toast && (
+        <Toast key={toast.id} nodeLabel={toast.nodeLabel} x={toast.x} y={toast.y} onDone={() => setToast(null)} />
       )}
     </div>
   );
